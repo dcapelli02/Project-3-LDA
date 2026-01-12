@@ -203,6 +203,77 @@ alz %>%
 
 # 0 - home, 1 - residence
 
+### COMMON PLOT ###
+library(patchwork)
+
+scala_uniforme <- scale_fill_viridis_c(limits = c(0, 100), name = "% Missing")
+
+# 1. Sex
+p1 <- alz %>%
+  select(sex, matches("cdrsb\\d+$")) %>%  
+  gg_miss_fct(fct = sex) +
+  scala_uniforme +
+  labs(title = "Sex", y = "% Observed Patients", x = "")
+
+# 2. Age
+p2 <- alz %>%
+  select(age, matches("cdrsb\\d+$")) %>%  
+  gg_miss_fct(fct = age) +
+  scala_uniforme +
+  labs(title = "Age", y = "% Observed Patients", x = "")
+
+# 3. Edu
+p3 <- alz %>%
+  select(edu, matches("cdrsb\\d+$")) %>%  
+  gg_miss_fct(fct = edu) +
+  scala_uniforme +
+  labs(title = "Edu", y = "% Observed Patients", x = "")
+
+# 4. BMI
+p4 <- alz %>%
+  select(bmi, matches("cdrsb\\d+$")) %>%  
+  gg_miss_fct(fct = bmi) +
+  scala_uniforme +
+  labs(title = "BMI", y = "% Observed Patients", x = "")
+
+# 5. Inkomen
+p5 <- alz %>%
+  select(inkomen, matches("cdrsb\\d+$")) %>%  
+  gg_miss_fct(fct = inkomen) +
+  scala_uniforme +
+  labs(title = "Inkomen", y = "% Observed Patients", x = "")
+
+# 6. Job
+p6 <- alz %>%
+  select(job, matches("cdrsb\\d+$")) %>%  
+  gg_miss_fct(fct = job) +
+  scala_uniforme +
+  labs(title = "Job", y = "% Observed Patients", x = "")
+
+# 7. ADL
+p7 <- alz %>%
+  select(adl, matches("cdrsb\\d+$")) %>%  
+  gg_miss_fct(fct = adl) +
+  scala_uniforme +
+  labs(title = "ADL", y = "% Observed Patients", x = "")
+
+# 8. WZC
+p8 <- alz %>%
+  select(wzc, matches("cdrsb\\d+$")) %>%  
+  gg_miss_fct(fct = wzc) +
+  scala_uniforme +
+  labs(title = "WZC", y = "% Observed Patients", x = "")
+
+# Final Combination
+grafico_finale <- (p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8) + 
+  plot_layout(ncol = 2, guides = "collect") & 
+  theme(legend.position = "bottom")
+
+# Stampa
+print(grafico_finale)
+
+###
+
 # MEAN PROFILES BY DROPOUT TIME
 
 dropout_info <- alz_long %>%
@@ -538,4 +609,5 @@ ggplot(cdrsb_bin_prop, aes(x = as.factor(time), y = prop_positive, color = is_mi
     title = "Evidence for MAR: Binary CDRSB (Observed vs Missing Next)"
   ) +
   theme_minimal()
+
 
